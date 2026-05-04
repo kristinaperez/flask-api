@@ -11,7 +11,7 @@ app.config['JSON_AS_ASCII'] = False
 def health():
     return {"status":"ok"}, 200
 
-app.route("/users", methods=["GET"])
+@app.route("/users", methods=["GET"])
 def get_users():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -76,22 +76,6 @@ def add_user():
     conn.close()
 
     return jsonify({"id": user_id, "name": name})
-
-
-@app.route("/users", methods=["GET"])
-def get_users():
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT id, name FROM users;")
-    users = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return jsonify([
-        {"id": u[0], "name": u[1]} for u in users
-    ])
 
 
 @app.route("/")

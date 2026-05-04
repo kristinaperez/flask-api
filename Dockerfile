@@ -5,12 +5,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir  -r requirements.txt
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && \
+    apt-get install -y curl netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*   
 
 COPY . .
 
-CMD ["gunicorn", "-w", "4", "-b","0.0.0.0:5000","app:app"]
-
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+  CMD curl -f http://localhost:5000/health || exit 1
 
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
