@@ -40,11 +40,21 @@ jobs:
             echo "🚀 Start"
             docker-compose up -d
 
-            echo "⏳ Wai wait"
-            sleep 5
+            echo "⏳ ait"
+            sleep 5 
 
-            echo "🧪 Healthcheck"
-            curl -fk https://localhost/health
+            echo "🧪 Healthcheck" 
+            for i in {1...10}; do
+              if curl -fk https://localhost/health; then
+                echo "✅ App is ready" 
+                exit 0
+              fi  
+              echo "⏳  Waiting..."
+              sleep 3 
+            done
+            
+            echo "❌ App failed"
+            exit 1 
 
             echo "✅ Deploy OK"
           EOF
