@@ -40,7 +40,7 @@ jobs:
             echo "🚀 Start"
             docker compose up -d
 
-            echo "⏳ Wait"
+            echo "⏳ Wai wait"
             sleep 5
 
             echo "🧪 Healthcheck"
