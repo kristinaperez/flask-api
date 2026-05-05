@@ -3,6 +3,8 @@ import psycopg2
 import os
 import time
 
+raise Exception("test crash")
+
 app = Flask(__name__)
 
 app.config['JSON_AS_ASCII'] = False

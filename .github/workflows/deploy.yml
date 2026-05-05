@@ -23,7 +23,39 @@ jobs:
       - name: Deploy
         run: |
           ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
-            cd ~/flask-api
-            git pull
-            docker compose up -d --build
-          EOF
+           set -e
+
+           cd ~/flask-api
+
+           echo "📦 Save current version"
+           git rev-parse HEAD > previous_version.txt 
+
+
+           git pull
+
+           echo "🔨 Build containers"
+           docker compose build
+
+           echo "🚀 Start containers"
+           docker compose up -d
+
+           echo "⏳ Waiting for app..."
+           sleep 5
+
+
+
+           echo "🧪 Healthcheck"
+           if curl -f http://localhost/health; then
+             echo  "✅ OK" 
+           else        
+             echo "❌ FAILED → rollback"
+
+             git checkout $(cat previous_version.txt)
+             docker compose up -d --build
+
+             exit 1
+          fi
+     EOF 
+
+
+
