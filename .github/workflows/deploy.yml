@@ -50,7 +50,7 @@ jobs:
               sleep 3 
             done
  
-            if [ $SUCCESS -ne 1]; then
+            if [ "$SUCCESS" -ne 1 ]; then
               echo "❌ Deploy failed, rollback..."
           
               git checkout $PREV 
