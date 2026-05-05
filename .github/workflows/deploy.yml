@@ -22,15 +22,11 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "USER=${{ secrets.VM_USER }}" 
-          echo "HOST=${{ secrets.VM_HOST }}" 
-          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << EOF
-            set -e
-
+          ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
             cd ~/flask-api
 
             echo "📦 Save current version"
-            git rev-parse HEAD > previous_version.txt
+            PREV=$(git rev-parse HEAD)
 
             git pull
 
@@ -40,21 +36,28 @@ jobs:
             echo "🚀 Start"
             docker-compose up -d
 
-            echo "⏳ ait"
-            sleep 5 
+            echo "🧪 Healthcheck"
 
-            echo "🧪 Healthcheck" 
+            SUCCESS=0
+ 
             for i in {1...10}; do
               if curl -fk https://localhost/health; then
                 echo "✅ App is ready" 
-                exit 0
+                SUCCESS=1
+                break
               fi  
               echo "⏳  Waiting..."
               sleep 3 
             done
-            
-            echo "❌ App failed"
-            exit 1 
+ 
+            if [ $SUCCESS -ne 1]; then
+              echo "❌ Deploy failed, rollback..."
+          
+              git checkout $PREV 
+              docker-compose up -d --build
 
-            echo "✅ Deploy OK"
+              exit 1
+            fi             
+
+            echo "✅ Deploysuccess"
           EOF
