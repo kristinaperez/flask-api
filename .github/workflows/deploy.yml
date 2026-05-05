@@ -56,8 +56,20 @@ jobs:
               git checkout $PREV 
               docker-compose up -d --build
 
-              exit 1
-            fi             
+              echo "🔁 Checking rollback..."
 
-            echo "✅ Deploysuccess"
-          EOF
+              for i in {1..10}; do
+                if curl -fk https://localhost/health; then
+                  echo "✅ Rollback success"
+                  exit 1
+                fi
+                echo "⏳ Waiting rollback..."
+                sleep 3
+              done
+
+              echo "💥 Rollback also failed"
+              exit 1
+            fi
+
+            echo "🎉 Deploy success"
+          EOF 
