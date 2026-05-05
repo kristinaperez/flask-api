@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "USER=${{ sercets.VM_USER }}" 
+          echo "USER=${{ secrets.VM_USER }}" 
           echo "HOST=${{ secrets.VM_HOST }}" 
           ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << EOF
             set -e
