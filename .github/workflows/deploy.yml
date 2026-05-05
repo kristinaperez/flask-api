@@ -35,10 +35,10 @@ jobs:
             git pull
 
             echo "🔨 Build"
-            docker compose build
+            docker-compose build
 
             echo "🚀 Start"
-            docker compose up -d
+            docker-compose up -d
 
             echo "⏳ Wai wait"
             sleep 5
