@@ -3,7 +3,8 @@ import psycopg2
 import os
 import time
 
-raise Exception("test crash & crash ")
+if False:
+   raise Exception("test crash & crash")
 
 app = Flask(__name__)
 
