@@ -1,5 +1,6 @@
 services:
   app:
+    restart: unless-stopped
     build: .
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
@@ -18,6 +19,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
 
   db:
+    restart: unless-stopped
     image: postgres:15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -37,6 +39,7 @@ services:
       - db
 
   nginx:
+    restart: unless-stopped
     image: nginx:latest
     ports:
       - "80:80"

@@ -82,12 +82,9 @@ def add_user():
 
 
 @app.route("/")
-def hello():
-    return {"message": "Version 3"} 
-def home():
-    return jsonify({
-        "message": "Hello from Flask via Gunicorn _ Nginx🚀"
-    })
+def index():   
+    return redirect(url_for("health"))  
+  
 
 @app.route("/db")
 def db_test():
