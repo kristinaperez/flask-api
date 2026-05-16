@@ -101,6 +101,6 @@ Introduce Terraform for infrastructure provisioning
 
 👩‍💻 Author
 
-Kristina Perez
+Kris Perez
 DevOps Engineer (Junior)
 
